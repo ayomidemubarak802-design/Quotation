@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JavaScript Map Function</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .score {
+            padding: 10px;
+            margin: 5px 0;
+            background: #eee;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Scores</h1>
+
+        <div id="result"></div>
+
+    </div>
+
+
+    <script>
+
+        // Original array
+        const scores = [50, 60, 70, 80, 90];
+
+
+        // map() creates a new array
+        const newScores = scores.map(function(score) {
+
+            return score +5;
+
+        });
+
+
+        // Display the result
+        let output = "";
+
+        newScores.forEach(function(score) {
+
+            output += `
+                <div class="score">
+                    Score: ${score}
+                </div>
+            `;
+
+        });
+
+
+        document.querySelector("#result").innerHTML = output;
+
+    </script>
+
+</body>
+
+</html>

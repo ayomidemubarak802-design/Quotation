@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CGPA Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            box-sizing: border-box;
+        }
+        body {
+               background: #0B3C71;
+               background-image: radial-gradient(
+                circle at 20% 10%,
+                #1E5FA0 0%,
+                #0B3C71 55%
+            );
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            background: #F7FAFD;
+            border-radius: 14px;
+            padding: 28px 26px 32px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+           border-top: 5px solid #4FA3E3;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0B3C71;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #1E5FA0;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .inputs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .inputs input,
+        input[type="text"],
+        input[type="number"] {
+            font-size: 14px;
+            padding: 11px 10px;
+            border-radius: 8px;
+            border: 1px solid #DCE7F2;
+            background: #FFFFFF;
+            color: #0B3C71;
+            outline: none;
+           
+        }
+
+        .inputs input:focus,
+        #taskInput:focus {
+            border-color: #4FA3E3;
+            box-shadow:
+                0 0 0 3px rgba(79, 163, 227, 0.18);
+        }
+
+        #course {
+            width: 40%;
+        }
+
+        #score {
+            width: 30%;
+        }
+
+        #unit {
+            width: 30%;
+        }
+
+        #btn {
+            width: 100%;
+            background: #0B3C71;
+            color: #F7FAFD;
+            border: none;
+            padding: 13px;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            border-radius: 8px;
+           
+        }
+        #btn:hover {
+            background: #1E5FA0;
+        }
+
+        #btn:active {
+            transform: scale(0.99);
+        }
+
+        .table-container {
+            margin-top: 18px;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #DCE7F2;
+        }
+
+        #courseTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+        }
+
+        #courseTable th,
+        #courseTable td {
+            padding: 9px 6px;
+            text-align: center;
+        }
+
+        #courseTable th {
+            background: #0B3C71;
+            color: #ffffff;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 11px;
+        }
+
+        #courseTable tbody tr {
+            border-top: 1px solid #DCE7F2;
+        }
+
+        #courseTable tbody tr:nth-child(even) {
+            background: #FFFFFF;
+        }
+
+        #courseTable tbody td {
+            color: #0B3C71;
+        }
+
+        .result {
+            margin-top: 22px;
+        }
+        .result p {
+            display: flex;
+            justify-content: space-between;
+            padding: 11px 14px;
+            margin-top: 8px;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #FFFFFF;
+            color: #0B3C71;
+            border: 1px solid #DCE7F2;
+        }
+
+        .result p b {
+            font-weight: bold;
+            color: #1E5FA0;
+        }
+
+        #CGPA {
+            background: #0B3C71;
+            color: #4FA3E3;
+            font-size: 16px;
+            border: none;
+        }
+
+        #CGPA b {
+            color: #F7FAFD;
+        }
+
+        #message {
+            display: none;
+            background: #0B3C71;
+            color: red;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .todo {
+            margin-top: 30px;
+            border-top: 1px solid #DCE7F2;
+            padding-top: 22px;
+        }
+
+        .todo h3 {
+            text-align: center;
+            color: #0B3C71;
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+        .todo-input {
+            display: flex;
+            gap: 8px;
+        }
+
+        #taskInput {
+
+            width: 75%;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 11px 10px;
+            border-radius: 8px;
+            border: 1px solid #DCE7F2;
+            background: #FFFFFF;
+            color: #0B3C71;
+            outline: none;
+        }
+
+        #addTask {
+            width: 25%;
+            background: #4FA3E3;
+            color: #0B3C71;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        #addTask:hover {
+            background: #1E5FA0;
+            color: #FFFFFF;
+        }
+
+        #taskList {
+            margin-top: 14px;
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+
+        #taskList li {
+            background: #FFFFFF;
+            padding: 11px 14px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #0B3C71;
+            border-left: 3px solid #4FA3E3;
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+
+        #taskList li:hover {
+            background: #F7FAFD;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        #todoMessage {
+            text-align: center;
+            color: #1E5FA0;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+         @media (max-width: 500px) {
+
+            body {
+                padding: 15px;
+            }
+
+
+            .container {
+                padding: 22px 18px 25px;
+                border-radius: 12px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 10px;
+                letter-spacing: 1.5px;
+            }
+
+            .inputs {
+                flex-direction: column;
+            }
+
+            #course,
+            #score,
+            #unit {
+
+                width: 100%;
+            }
+
+            #courseTable {
+                font-size: 11px;
+            }
+
+
+            #courseTable th,
+            #courseTable td {
+                padding: 8px 4px;
+            }
+
+
+            .todo-input {
+                flex-direction: row;
+            }
+
+
+            #taskInput {
+                width: 75%;
+            }
+
+            #addTask {
+                width: 25%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+        <h2>CGPA Calculator</h2>
+
+        <p class="subtitle">
+            Track your courses and grade point average
+        </p>
+
+
+
+
+        <div class="inputs">
+
+            <input
+                id="course"
+                type="text"
+                placeholder="Course"
+            >
+
+            <input
+                id="score"
+                type="number"
+                placeholder="Score"
+                min="0"
+                max="100"
+            >
+
+            <input
+                id="unit"
+                type="number"
+                placeholder="Unit"
+                min="1"
+                max="6"
+            >
+
+        </div>
+
+
+        <input
+            id="btn"
+            type="button"
+            value="Add Course"
+        >
+
+        <div class="table-container">
+
+            <table id="courseTable">
+                <thead>
+
+                    <tr>
+                       <th>S/N</th>
+                        <th>Course</th>
+                        <th>Score</th>
+                        <th>Unit</th>
+                        <th>Grade</th>
+                        <th>GP</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="courseList"></tbody>
+
+            </table>
+
+        </div>
+
+
+
+
+        <div class="result">
+
+            <p id="unitdisplay">
+
+                <b>Total Credit Unit</b>
+
+                <span>0</span>
+
+            </p>
+
+
+            <p id="grade">
+
+                <b>Total Grade Point</b>
+
+                <span>0.00</span>
+
+            </p>
+
+
+            <p id="CGPA">
+
+                <b>CGPA</b>
+
+                <span>0.00</span>
+
+            </p>
+
+
+            <p id="remark">
+
+                <b>Remark</b>
+
+                <span>-</span>
+
+            </p>
+
+
+            <p id="message"></p>
+
+        </div>
+
+
+
+
+        <div class="todo">
+
+            <h3>My To-Do List</h3>
+
+
+            <div class="todo-input">
+
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="Enter a task"
+                >
+
+
+                <button id="addTask">
+
+                    Add
+
+                </button>
+
+            </div>
+
+
+            <p id="todoMessage">
+
+                No tasks yet
+
+            </p>
+
+
+            <ul id="taskList"></ul>
+
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+
+
+
+
+        let totalCU = 0;
+
+        let totalGP = 0;
+
+        let courseCount = 0;
+
+
+        const course =
+            document.getElementById('course');
+
+
+        const score =
+            document.getElementById('score');
+
+
+        const unit =
+            document.getElementById('unit');
+
+
+        const btn =
+            document.getElementById('btn');
+
+
+        const message =
+            document.getElementById('message');
+
+
+        const courseList =
+            document.getElementById('courseList');
+
+
+
+
+        function getGradeAndGP(scoreValue) {
+
+
+            if (scoreValue >= 75) {
+
+                return {
+                    grade: 'A',
+                    gp: 4.00
+                };
+
+            }
+
+
+            if (scoreValue >= 70) {
+
+                return {
+                    grade: 'AB',
+                    gp: 3.50
+                };
+
+            }
+
+
+            if (scoreValue >= 60) {
+
+                return {
+                    grade: 'B',
+                    gp: 3.25
+                };
+
+            }
+
+
+            if (scoreValue >= 55) {
+
+                return {
+                    grade: 'BC',
+                    gp: 3.00
+                };
+
+            }
+
+
+            if (scoreValue >= 50) {
+
+                return {
+                    grade: 'C',
+                    gp: 2.75
+                };
+
+            }
+
+
+            if (scoreValue >= 45) {
+
+                return {
+                    grade: 'CD',
+                    gp: 2.50
+                };
+
+            }
+
+
+            if (scoreValue >= 40) {
+
+                return {
+                    grade: 'DE',
+                    gp: 2.00
+                };
+
+            }
+
+
+            return {
+                grade: 'F',
+                gp: 0.00
+            };
+
+        }
+
+
+
+        function getRemark(cgpa) {
+
+
+            if (cgpa >= 3.50) {
+
+                return "Distinction";
+
+            }
+
+
+            if (cgpa >= 3.00) {
+
+                return "Upper credit";
+
+            }
+
+
+            if (cgpa >= 2.50) {
+
+                return "Lower credit";
+
+            }
+
+
+            if (cgpa >= 1.00) {
+
+                return "Pass";
+
+            }
+
+
+            return "Fail";
+
+        }
+
+
+
+
+        btn.addEventListener(
+            'click',
+            function () {
+
+
+                message.style.display = 'none';
+
+
+                const coursetitle =
+                    course.value.trim();
+
+
+                const scorevalue =
+                    Number(score.value);
+
+
+                const unitvalue =
+                    Number(unit.value);
+
+
+
+                if (coursetitle === "") {
+
+                    message.textContent =
+                        'Enter your course title';
+
+                    message.style.display =
+                        'flex';
+
+                    return;
+
+                }
+
+
+
+
+                if (
+                    isNaN(scorevalue) ||
+                    scorevalue < 0 ||
+                    scorevalue > 100
+                ) {
+
+                    message.textContent =
+                        'Enter valid score 0-100';
+
+                    message.style.display =
+                        'flex';
+
+                    return;
+
+                }
+
+
+
+                if (
+                    isNaN(unitvalue) ||
+                    unitvalue < 1 ||
+                    unitvalue > 6
+                ) {
+
+                    message.textContent =
+                        'Enter valid course unit 1-6';
+
+                    message.style.display =
+                        'flex';
+
+                    return;
+
+                }
+
+
+                
+
+                let {
+                    grade,
+                    gp
+                } =
+                    getGradeAndGP(scorevalue);
+
+
+                let courseGP =
+                    unitvalue * gp;
+
+
+                totalCU += unitvalue;
+
+                totalGP += courseGP;
+
+                courseCount++;
+
+
+
+
+                let row =
+                    document.createElement('tr');
+
+
+                row.innerHTML = `
+
+                    <td>${courseCount}</td>
+
+                    <td>${coursetitle}</td>
+
+                    <td>${scorevalue}</td>
+
+                    <td>${unitvalue}</td>
+
+                    <td>${grade}</td>
+
+                    <td>${courseGP.toFixed(2)}</td>
+
+                `;
+
+
+                courseList.appendChild(row);
+
+
+
+
+                let cgpa =
+                    totalCU > 0
+                        ? (totalGP / totalCU).toFixed(2)
+                        : "0.00";
+
+
+
+
+                document
+                    .getElementById('unitdisplay')
+                    .innerHTML = `
+
+                        <b>Total Credit Unit</b>
+
+                        <span>${totalCU}</span>
+
+                    `;
+
+
+                document
+                    .getElementById('grade')
+                    .innerHTML = `
+
+                        <b>Total Grade Point</b>
+
+                        <span>${totalGP.toFixed(2)}</span>
+
+                    `;
+
+
+                document
+                    .getElementById('CGPA')
+                    .innerHTML = `
+
+                        <b>CGPA</b>
+
+                        <span>${cgpa}</span>
+
+                    `;
+
+
+                document
+                    .getElementById('remark')
+                    .innerHTML = `
+
+                        <b>Remark</b>
+
+                        <span>${getRemark(Number(cgpa))}</span>
+
+                    `;
+
+
+                
+
+                course.value = "";
+
+                score.value = "";
+
+                unit.value = "";
+
+            }
+        );
+
+
+
+        const taskInput =
+            document.getElementById('taskInput');
+
+
+        const addTask =
+            document.getElementById('addTask');
+
+
+        const taskList =
+            document.getElementById('taskList');
+
+
+        const todoMessage =
+            document.getElementById('todoMessage');
+
+
+        
+
+        addTask.addEventListener(
+            'click',
+            function () {
+
+
+                const task =
+                    taskInput.value.trim();
+
+
+                if (task === "") {
+
+                    alert(
+                        "Please enter a task"
+                    );
+
+                    return;
+
+                }
+
+
+
+
+                const li =
+                    document.createElement('li');
+
+
+                li.textContent =
+                    task;
+
+
+
+
+                li.addEventListener(
+                    'click',
+                    function () {
+
+                        li.classList.toggle(
+                            'completed'
+                        );
+
+                    }
+                );
+
+
+                taskList.appendChild(li);
+
+
+                taskInput.value = "";
+
+
+                checkTasks();
+
+            }
+        );
+
+
+
+
+        taskInput.addEventListener(
+            'keydown',
+            function (event) {
+
+
+                if (event.key === "Enter") {
+
+                    addTask.click();
+
+                }
+
+            }
+        );
+
+
+
+
+        function checkTasks() {
+
+
+            if (
+                taskList.children.length === 0
+            ) {
+
+                todoMessage.style.display =
+                    "block";
+
+            } else {
+
+                todoMessage.style.display =
+                    "none";
+
+            }
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

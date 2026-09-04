@@ -1,0 +1,73 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>array</title>
+</head>
+<body>
+  
+  <script>
+    const name = ['john', 'mary', 'qureebat','debby']
+      console.log(name)
+      console.log('add to the end', name.push('mubarak'))
+        console.log('remove from the end', name.pop())
+      console.log('add to the beginning', name.unshift('Ayo'))
+      console.log('remove from the beginning', name.shift())
+      console.log('take out of the array', name.slice(1,2))
+      console.log('take out', name.slice(0,2));
+      console.log(name)
+      console.log('remove', name.splice(2,2))
+      console.log('add', name.splice(1,2,'lizzy'))
+      console.log('replace', name.splice(0,0,'malik'))
+      console.log('mapping',name.map(function(text,index){
+        return index+ 1 +' '+ text
+      }))
+      
+      const students = [
+  {
+    name: "John",
+    age: 20,
+    department: "Computer Science",
+    score: 75
+  },
+  
+  {
+    name: "Mary",
+    age: 21,
+    department: "Software Engineering",
+    score: 82
+  },
+  
+  {
+    name: "David",
+    age: 19,
+    department: "Information Technology",
+    score: 68
+  }
+    ];
+      console.log('mapping', students.map(function(student, index) {
+       return index + 1 + ' ' + student.name + ' '+student.age
+    }))
+    
+    
+   /* Basic Structure
+const newArray = array.filter(function(item) {
+
+    return condition;
+
+});
+For example:*/
+const numbers = [1, 2, 3, 4, 5];
+
+const evenNumbers = numbers.filter(function(number) {
+
+    return number % 2 === 0;
+
+});
+
+console.log(evenNumbers);
+
+  </script>
+</body>
+</html>
